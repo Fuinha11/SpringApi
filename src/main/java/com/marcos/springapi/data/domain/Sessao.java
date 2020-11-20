@@ -1,11 +1,11 @@
 package com.marcos.springapi.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,13 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "sessoes")
-public class Sessao {
+public class Sessao implements Serializable {
 
     @Id
     @Column(name="ID", unique=true, updatable=false, nullable=false)
     @GeneratedValue
     private long id;
 
+    @JsonIgnore
     @ManyToOne
     private Pauta pauta;
 
@@ -27,14 +28,14 @@ public class Sessao {
     private LocalDateTime dataInicio;
 
     @Column(name="data_fim", updatable=false, nullable=false)
-    private LocalDateTime data_fim;
+    private LocalDateTime dataFim;
 
-    @OneToMany(mappedBy = "sessao")
+    @OneToMany(mappedBy = "sessao", fetch = FetchType.LAZY)
     private List<Voto> votos;
 
-    public Sessao(Pauta pauta, LocalDateTime dataInicio, LocalDateTime data_fim) {
+    public Sessao(Pauta pauta, LocalDateTime dataInicio, LocalDateTime dataFim) {
         this.pauta = pauta;
         this.dataInicio = dataInicio;
-        this.data_fim = data_fim;
+        this.dataFim = dataFim;
     }
 }

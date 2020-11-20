@@ -12,6 +12,9 @@ Simple implementation of a standalone Spring Boot application with ActiveMQ queu
 - Lombok
 - Swagger UI
 
+## Notes
+- Some parts of this project are in Portuguese, that is to keep names accordingly to specification.
+
 ## How to use it? 
 1. Clone the repository
 1. Add as a Maven Project
