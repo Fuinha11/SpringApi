@@ -3,6 +3,7 @@ package com.marcos.springapi.web;
 import com.marcos.springapi.data.domain.Sessao;
 import com.marcos.springapi.data.domain.VotingResults;
 import com.marcos.springapi.data.domain.Voto;
+import com.marcos.springapi.exception.MissingFieldException;
 import com.marcos.springapi.service.VotingService;
 import com.marcos.springapi.web.dto.BaseResponse;
 import com.marcos.springapi.web.dto.CreateSessão;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @RestController
 public class VotingController {
@@ -20,9 +23,12 @@ public class VotingController {
     private VotingService votingService;
 
     @PostMapping(path = "/sessoes")
-    public ResponseEntity createSessao(@Valid @RequestBody CreateSessão body) {
+    public ResponseEntity createSessao(@NotNull @RequestBody CreateSessão body) {
         BaseResponse response;
         try {
+            if (Objects.isNull(body.getPautaId()))
+                throw new MissingFieldException("pautaId");
+
             Sessao sessao = votingService.createSessao(body.getPautaId(), body.getDuracao());
             response = new BaseResponse(sessao);
         } catch (Exception e) {
@@ -32,9 +38,16 @@ public class VotingController {
     }
 
     @PostMapping(path = "/sessao/{id}/vote")
-    public ResponseEntity voteOnSession(@PathVariable Long id ,@Valid @RequestBody CreateVoto body) {
+    public ResponseEntity voteOnSession(@PathVariable Long id ,@NotNull @RequestBody CreateVoto body) {
         BaseResponse response;
         try {
+            if (Objects.isNull(body.getAssociadoId()))
+                throw new MissingFieldException("associadoId");
+
+
+            if (Objects.isNull(body.getAprovado()))
+                throw new MissingFieldException("aprovado");
+
             Voto voto = votingService.voteToSession(id, body.getAssociadoId(), body.getAprovado());
             response = new BaseResponse(voto);
         } catch (Exception e) {
