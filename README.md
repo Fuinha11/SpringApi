@@ -17,3 +17,12 @@ Simple implementation of a standalone Spring Boot application with ActiveMQ queu
 1. Add as a Maven Project
 1. Download sources.
 1. Run SpringapiApplication.java
+
+## Extra Features
+- To check out the database 
+    - go to: http://localhost:8080/springapi/h2
+    - JDBC URL: jdbc:h2:file:./database-file
+    - User: sa
+    - Password: password
+    
+    
