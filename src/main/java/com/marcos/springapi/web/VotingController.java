@@ -17,13 +17,14 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @RestController
+@RequestMapping(path = "/api")
 public class VotingController {
 
     @Autowired
     private VotingService votingService;
 
     @PostMapping(path = "/sessoes")
-    public ResponseEntity createSessao(@NotNull @RequestBody CreateSessão body) {
+    public ResponseEntity<BaseResponse<Sessao>> createSessao(@NotNull @RequestBody CreateSessão body) {
         BaseResponse response;
         try {
             if (Objects.isNull(body.getPautaId()))
@@ -38,7 +39,7 @@ public class VotingController {
     }
 
     @PostMapping(path = "/sessao/{id}/vote")
-    public ResponseEntity voteOnSession(@PathVariable Long id ,@NotNull @RequestBody CreateVoto body) {
+    public ResponseEntity<BaseResponse<Voto>> voteOnSession(@PathVariable Long id ,@NotNull @RequestBody CreateVoto body) {
         BaseResponse response;
         try {
             if (Objects.isNull(body.getAssociadoId()))
@@ -57,7 +58,7 @@ public class VotingController {
     }
 
     @GetMapping(path = "/sessao/{id}/resultados")
-    public ResponseEntity tallySessao(@PathVariable Long id) {
+    public ResponseEntity<BaseResponse<VotingResults>> tallySessao(@PathVariable Long id) {
         BaseResponse response;
         try {
             VotingResults results = votingService.tallySession(id);

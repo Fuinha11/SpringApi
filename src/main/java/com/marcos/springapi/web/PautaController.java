@@ -10,19 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @RestController
+@RequestMapping(path = "/api")
 public class PautaController {
 
     @Autowired
     PautaService pautaService;
 
-    @PostMapping(path = "pautas")
-    public ResponseEntity<BaseResponse> createPauta(@NotNull @RequestBody CreatePauta body) {
+    @PostMapping(path = "/pautas")
+    public ResponseEntity<BaseResponse<Pauta>> createPauta(@NotNull @RequestBody CreatePauta body) {
         BaseResponse response;
         try {
 

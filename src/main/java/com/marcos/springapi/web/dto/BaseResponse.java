@@ -10,10 +10,10 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Data
-public class BaseResponse implements Serializable {
+public class BaseResponse<T> implements Serializable {
     @JsonIgnore
     private HttpStatus status;
-    private Object payload;
+    private T payload;
     private String errorMessage;
 
     public BaseResponse(Object payload) {
@@ -27,7 +27,7 @@ public class BaseResponse implements Serializable {
             this.status = HttpStatus.INTERNAL_SERVER_ERROR;
             this.errorMessage = ((Throwable) payload).getMessage();
         } else
-            this.payload = payload;
+            this.payload = (T) payload;
     }
 
     public ResponseEntity<BaseResponse> ok() {
