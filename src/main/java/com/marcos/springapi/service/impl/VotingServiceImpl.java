@@ -5,6 +5,9 @@ import com.marcos.springapi.data.repository.AssociadoRepository;
 import com.marcos.springapi.data.repository.PautaRepository;
 import com.marcos.springapi.data.repository.SessaoRepository;
 import com.marcos.springapi.data.repository.VotoRepository;
+import com.marcos.springapi.exception.AlreadyVotedException;
+import com.marcos.springapi.exception.ObjectNotFountException;
+import com.marcos.springapi.exception.SessionClosedException;
 import com.marcos.springapi.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,17 +31,15 @@ public class VotingServiceImpl implements VotingService {
     private VotoRepository votoRepository;
 
     @Override
-    public Sessao createSessao(Long pautaId, Integer durationInMinutes) {
-        Optional<Pauta> oPauta = pautaRepository.findById(pautaId);
-        if (oPauta.isEmpty())
-            return null;
+    public Sessao createSessao(Long pautaId, Integer durationInMinutes) throws ObjectNotFountException {
+        Pauta pauta = getPauta(pautaId);
 
         if (Objects.isNull(durationInMinutes) || durationInMinutes < 1)
             durationInMinutes = 1;
 
         return sessaoRepository.save(
           new Sessao(
-                  oPauta.get(),
+                  pauta,
                   LocalDateTime.now(),
                   LocalDateTime.now().plus(durationInMinutes, MINUTES)
           )
@@ -46,23 +47,17 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public Voto voteToSession(Long sessionId, Long associateId, Boolean approved) {
-        Optional<Associado> oAssociado = associadoRepository.findById(associateId);
-        if (oAssociado.isEmpty())
-            return null;
-        Associado associado = oAssociado.get();
+    public Voto voteToSession(Long sessionId, Long associateId, Boolean approved) throws ObjectNotFountException, AlreadyVotedException, SessionClosedException {
+        Associado associado = getAssociado(associateId);
 
-        Optional<Sessao> oSessao = sessaoRepository.findById(sessionId);
-        if (oSessao.isEmpty())
-            return null;
-        Sessao sessao = oSessao.get();
+        Sessao sessao = getSessao(sessionId);
 
         if (sessao.getDataFim().isBefore(LocalDateTime.now()))
-            return null;
+            throw new SessionClosedException(sessao.getId());
 
         for (Voto v : sessao.getVotos()) {
             if (v.getAssociado().equals(associado))
-                return null;
+                throw new AlreadyVotedException(associado.getId());
         }
 
         return votoRepository.save(
@@ -75,12 +70,9 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public VotingResults tallySession(Long sessionId) {
+    public VotingResults tallySession(Long sessionId) throws ObjectNotFountException {
 
-        Optional<Sessao> oSessao = sessaoRepository.findById(sessionId);
-        if (oSessao.isEmpty())
-            return null;
-        Sessao sessao = oSessao.get();
+        Sessao sessao = getSessao(sessionId);
 
         int approvedVotes = 0;
         int declinedVotes = 0;
@@ -101,5 +93,26 @@ public class VotingServiceImpl implements VotingService {
                 declinedVotes,
                 approvedVotes > declinedVotes
         );
+    }
+
+    private Pauta getPauta(Long pautaId) throws ObjectNotFountException {
+        Optional<Pauta> oPauta = pautaRepository.findById(pautaId);
+        if (oPauta.isEmpty())
+            throw new ObjectNotFountException(pautaId, "Pauta");
+        return oPauta.get();
+    }
+
+    private Associado getAssociado(Long associateId) throws ObjectNotFountException {
+        Optional<Associado> oAssociado = associadoRepository.findById(associateId);
+        if (oAssociado.isEmpty())
+            throw new ObjectNotFountException(associateId, "Associado");
+        return oAssociado.get();
+    }
+
+    private Sessao getSessao(Long sessionId) throws ObjectNotFountException {
+        Optional<Sessao> oSessao = sessaoRepository.findById(sessionId);
+        if (oSessao.isEmpty())
+            throw new ObjectNotFountException(sessionId, "Sessao");
+        return oSessao.get();
     }
 }
