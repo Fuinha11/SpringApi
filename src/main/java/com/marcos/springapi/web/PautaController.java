@@ -21,6 +21,6 @@ public class PautaController {
     @PostMapping(path = "pautas")
     public ResponseEntity<BaseResponse> createPauta(@Valid @RequestBody CreatePauta body) {
         Pauta pauta = pautaService.createPauta(body.getDescricao());
-        return new BaseResponse(pauta).Created();
+        return new BaseResponse(pauta).created();
     }
 }

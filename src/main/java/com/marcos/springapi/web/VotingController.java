@@ -21,19 +21,37 @@ public class VotingController {
 
     @PostMapping(path = "/sessoes")
     public ResponseEntity createSessao(@Valid @RequestBody CreateSessão body) {
-        Sessao sessao = votingService.createSessao(body.getPautaId(), body.getDuracao());
-        return new BaseResponse(sessao).Created();
+        BaseResponse response;
+        try {
+            Sessao sessao = votingService.createSessao(body.getPautaId(), body.getDuracao());
+            response = new BaseResponse(sessao);
+        } catch (Exception e) {
+            response = new BaseResponse(e);
+        }
+        return response.created();
     }
 
     @PostMapping(path = "/sessao/{id}/vote")
     public ResponseEntity voteOnSession(@PathVariable Long id ,@Valid @RequestBody CreateVoto body) {
-        Voto voto = votingService.voteToSession(id,body.getAssociadoId(), body.getAprovado());
-        return new BaseResponse(voto).Created();
+        BaseResponse response;
+        try {
+            Voto voto = votingService.voteToSession(id, body.getAssociadoId(), body.getAprovado());
+            response = new BaseResponse(voto);
+        } catch (Exception e) {
+            response = new BaseResponse(e);
+        }
+        return response.created();
     }
 
     @GetMapping(path = "/sessao/{id}/resultados")
     public ResponseEntity tallySessao(@PathVariable Long id) {
-        VotingResults results = votingService.tallySession(id);
-        return new BaseResponse(results).Ok();
+        BaseResponse response;
+        try {
+            VotingResults results = votingService.tallySession(id);
+            response = new BaseResponse(results);
+        } catch (Exception e) {
+            response = new BaseResponse(e);
+        }
+        return response.created();
     }
 }
