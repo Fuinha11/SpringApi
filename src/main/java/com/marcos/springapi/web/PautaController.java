@@ -5,6 +5,9 @@ import com.marcos.springapi.exception.MissingFieldException;
 import com.marcos.springapi.service.PautaService;
 import com.marcos.springapi.web.dto.BaseResponse;
 import com.marcos.springapi.web.dto.CreatePauta;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +26,9 @@ public class PautaController {
     @Autowired
     PautaService pautaService;
 
-    @PostMapping(path = "/pautas")
+    @ApiOperation(value = "Cria uma nova Pauta.")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Retorna os resultados da Sessão de votação.")})
+    @PostMapping(path = "/pautas", produces="application/json", consumes="application/json")
     public ResponseEntity<BaseResponse<Pauta>> createPauta(@NotNull @RequestBody CreatePauta body) {
         BaseResponse response;
         try {

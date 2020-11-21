@@ -6,13 +6,15 @@ import com.marcos.springapi.data.domain.Voto;
 import com.marcos.springapi.exception.MissingFieldException;
 import com.marcos.springapi.service.VotingService;
 import com.marcos.springapi.web.dto.BaseResponse;
-import com.marcos.springapi.web.dto.CreateSessão;
+import com.marcos.springapi.web.dto.CreateSessao;
 import com.marcos.springapi.web.dto.CreateVoto;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
@@ -23,8 +25,10 @@ public class VotingController {
     @Autowired
     private VotingService votingService;
 
-    @PostMapping(path = "/sessoes")
-    public ResponseEntity<BaseResponse<Sessao>> createSessao(@NotNull @RequestBody CreateSessão body) {
+    @ApiOperation(value = "Cria uma nova Sessão de votação em uma Pauta.")
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Retorna a nova Sessão criada.")})
+    @PostMapping(path = "/sessoes", produces="application/json", consumes="application/json")
+    public ResponseEntity<BaseResponse<Sessao>> createSessao(@NotNull @RequestBody CreateSessao body) {
         BaseResponse response;
         try {
             if (Objects.isNull(body.getPautaId()))
@@ -38,7 +42,9 @@ public class VotingController {
         return response.created();
     }
 
-    @PostMapping(path = "/sessao/{id}/vote")
+    @ApiOperation(value = "Cria um Voto em uma Sessão de votação.")
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Retorna o Voto criado.")})
+    @PostMapping(path = "/sessao/{id}/vote", produces="application/json", consumes="application/json")
     public ResponseEntity<BaseResponse<Voto>> voteOnSession(@PathVariable Long id ,@NotNull @RequestBody CreateVoto body) {
         BaseResponse response;
         try {
@@ -57,7 +63,9 @@ public class VotingController {
         return response.created();
     }
 
-    @GetMapping(path = "/sessao/{id}/resultados")
+    @ApiOperation(value = "Contabiliza os votos da Sessão.")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Retorna os resultados da Sessão de votação.")})
+    @GetMapping(path = "/sessao/{id}/resultados", produces="application/json", consumes="application/json")
     public ResponseEntity<BaseResponse<VotingResults>> tallySessao(@PathVariable Long id) {
         BaseResponse response;
         try {

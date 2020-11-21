@@ -2,6 +2,7 @@ package com.marcos.springapi.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.marcos.springapi.exception.CustomException;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,14 @@ import java.util.Objects;
 
 @Data
 public class BaseResponse<T> implements Serializable {
+
     @JsonIgnore
     private HttpStatus status;
+
+    @ApiModelProperty(value = "Payload desejado em caso de sucesso")
     private T payload;
+
+    @ApiModelProperty(value = "Menssagem de erro em caso de falha")
     private String errorMessage;
 
     public BaseResponse(Object payload) {

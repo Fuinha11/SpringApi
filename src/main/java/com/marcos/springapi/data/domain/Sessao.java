@@ -1,6 +1,7 @@
 package com.marcos.springapi.data.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "sessoes")
 public class Sessao implements Serializable {
 
+    @ApiModelProperty(value = "Id da Sessão")
     @Id
     @Column(name="ID", unique=true, updatable=false, nullable=false)
     @GeneratedValue
@@ -24,9 +26,11 @@ public class Sessao implements Serializable {
     @ManyToOne
     private Pauta pauta;
 
+    @ApiModelProperty(value = "Data de inicio da Sessão")
     @Column(name="data_inicio", updatable=false, nullable=false)
     private LocalDateTime dataInicio;
 
+    @ApiModelProperty(value = "Data de fim da Sessão")
     @Column(name="data_fim", updatable=false, nullable=false)
     private LocalDateTime dataFim;
 
