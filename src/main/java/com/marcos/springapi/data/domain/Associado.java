@@ -25,9 +25,9 @@ public class Associado {
     @ApiModelProperty(value = "CPF do Associado")
     @Column(name="cpf", unique=true, updatable=false, nullable=false)
     @GeneratedValue
-    private long cpf;
+    private String cpf;
 
-    public Associado(String nome, long cpf) {
+    public Associado(String nome, String cpf) {
         this.nome = nome;
         this.cpf = cpf;
     }
