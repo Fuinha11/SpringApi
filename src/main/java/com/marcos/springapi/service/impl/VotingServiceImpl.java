@@ -5,9 +5,8 @@ import com.marcos.springapi.data.repository.AssociadoRepository;
 import com.marcos.springapi.data.repository.PautaRepository;
 import com.marcos.springapi.data.repository.SessaoRepository;
 import com.marcos.springapi.data.repository.VotoRepository;
-import com.marcos.springapi.exception.AlreadyVotedException;
-import com.marcos.springapi.exception.ObjectNotFountException;
-import com.marcos.springapi.exception.SessionClosedException;
+import com.marcos.springapi.exception.*;
+import com.marcos.springapi.service.ExternalValidationService;
 import com.marcos.springapi.service.VotingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,8 @@ public class VotingServiceImpl implements VotingService {
     private SessaoRepository sessaoRepository;
     @Autowired
     private VotoRepository votoRepository;
+    @Autowired
+    private ExternalValidationService validationService;
 
     @Override
     public Sessao createSessao(Long pautaId, Integer durationInMinutes) throws ObjectNotFountException {
@@ -47,8 +48,12 @@ public class VotingServiceImpl implements VotingService {
     }
 
     @Override
-    public Voto voteToSession(Long sessionId, Long associateId, Boolean approved) throws ObjectNotFountException, AlreadyVotedException, SessionClosedException {
+    public Voto voteToSession(Long sessionId, Long associateId, Boolean approved) throws CustomException {
+
         Associado associado = getAssociado(associateId);
+
+        if (!validationService.isAbleToVote(associado))
+            throw new UnableToVoteException(associado.getId());
 
         Sessao sessao = getSessao(sessionId);
 
