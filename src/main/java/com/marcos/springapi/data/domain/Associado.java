@@ -1,7 +1,8 @@
 package com.marcos.springapi.data.domain;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
