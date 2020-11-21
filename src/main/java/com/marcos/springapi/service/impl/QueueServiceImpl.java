@@ -1,11 +1,8 @@
 package com.marcos.springapi.service.impl;
 
-import com.marcos.springapi.data.domain.Associado;
 import com.marcos.springapi.data.domain.Sessao;
-import com.marcos.springapi.data.repository.AssociadoRepository;
 import com.marcos.springapi.data.repository.SessaoRepository;
 import com.marcos.springapi.service.QueueService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
