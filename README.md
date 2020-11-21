@@ -22,8 +22,12 @@ Simple implementation of a standalone Spring Boot application with ActiveMQ queu
 1. Run SpringapiApplication.java
 
 ## Extra Features
+- Documentation with Swagger UI
+    - Go to: http://localhost:8080/springapi/swagger-ui.html
+    - Enjoy 
+
 - To check out the database 
-    - go to: http://localhost:8080/springapi/h2
+    - Go to: http://localhost:8080/springapi/h2
     - JDBC URL: jdbc:h2:file:./database-file
     - User: sa
     - Password: password
