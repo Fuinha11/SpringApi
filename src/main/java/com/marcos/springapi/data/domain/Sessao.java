@@ -20,7 +20,7 @@ public class Sessao implements Serializable {
     @Id
     @Column(name="ID", unique=true, updatable=false, nullable=false)
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @JsonIgnore
     @ManyToOne
@@ -34,6 +34,10 @@ public class Sessao implements Serializable {
     @Column(name="data_fim", updatable=false, nullable=false)
     private LocalDateTime dataFim;
 
+    @JsonIgnore
+    @Column(name = "sincronizado", nullable = false)
+    private Boolean sincronizado;
+
     @OneToMany(mappedBy = "sessao", fetch = FetchType.LAZY)
     private List<Voto> votos;
 
@@ -41,5 +45,6 @@ public class Sessao implements Serializable {
         this.pauta = pauta;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
+        this.sincronizado = false;
     }
 }
