@@ -1,9 +1,6 @@
 package com.marcos.springapi.service.impl;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.marcos.springapi.data.domain.Associado;
-import com.marcos.springapi.exception.JavaException;
-import com.marcos.springapi.exception.UnableToVoteException;
 import com.marcos.springapi.exception.ValidationServiceUnavailable;
 import com.marcos.springapi.service.ExternalValidationService;
 import lombok.NoArgsConstructor;
