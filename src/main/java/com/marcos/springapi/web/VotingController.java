@@ -45,7 +45,7 @@ public class VotingController {
     @ApiOperation(value = "Cria um Voto em uma Sessão de votação.")
     @ApiResponses(value = {@ApiResponse(code = 201, message = "Retorna o Voto criado.")})
     @PostMapping(path = "/sessao/{id}/vote", produces="application/json", consumes="application/json")
-    public ResponseEntity<BaseResponse<Voto>> voteOnSession(@PathVariable Long id ,@NotNull @RequestBody CreateVoto body) {
+    public ResponseEntity<BaseResponse<Voto>> voteOnSession(@PathVariable Long id , @NotNull @RequestBody CreateVoto body) {
         BaseResponse response;
         try {
             if (Objects.isNull(body.getAssociadoId()))
@@ -65,7 +65,7 @@ public class VotingController {
 
     @ApiOperation(value = "Contabiliza os votos da Sessão.")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Retorna os resultados da Sessão de votação.")})
-    @GetMapping(path = "/sessao/{id}/resultados", produces="application/json", consumes="application/json")
+    @GetMapping(path = "/sessao/{id}/resultados", produces="application/json")
     public ResponseEntity<BaseResponse<VotingResults>> tallySessao(@PathVariable Long id) {
         BaseResponse response;
         try {
